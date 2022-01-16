@@ -27,5 +27,4 @@ export class User {
   @Property({type:'text'})
   password!: string;
 
-
 }

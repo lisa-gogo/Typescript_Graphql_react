@@ -3,6 +3,8 @@ import { MyContext } from "src/types";
 import { User } from "../entities/User";
 import argon2 from 'argon2'
 
+// import session from "express-session";
+
 
 @InputType()
 class UsernamePasswordInput {
@@ -80,7 +82,7 @@ export class UserResolver {
     @Mutation( () => UserResponse)
     async  login (
        @Arg('options',()=> UsernamePasswordInput) options: UsernamePasswordInput,
-       @Ctx(){em} : MyContext
+       @Ctx(){em, req} : MyContext
      ): Promise<UserResponse>{
          const user = await em.findOne(User, {username: options.username});
          if(!user){
@@ -102,6 +104,8 @@ export class UserResolver {
                 }]   
              }
          }    
+        
+        req.session.userId= user.id
        return{
            user 
        }
