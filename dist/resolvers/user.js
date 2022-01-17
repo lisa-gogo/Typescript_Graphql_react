@@ -59,6 +59,15 @@ UserResponse = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], UserResponse);
 let UserResolver = class UserResolver {
+    me({ req, em }) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!req.session.userId) {
+                return null;
+            }
+            const user = yield em.findOne(User_1.User, { id: req.session.userId });
+            return user;
+        });
+    }
     register(options, { em }) {
         return __awaiter(this, void 0, void 0, function* () {
             if (options.username.length <= 2) {
@@ -118,12 +127,17 @@ let UserResolver = class UserResolver {
                 };
             }
             req.session.userId = user.id;
+            console.log(req.session.userId);
             return {
                 user
             };
         });
     }
 };
+__decorate([
+    (0, type_graphql_1.Query)(() => User_1.User, { nullable: true }),
+    __param(0, (0, type_graphql_1.Ctx)())
+], UserResolver.prototype, "me", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => UserResponse),
     __param(0, (0, type_graphql_1.Arg)('options', () => UsernamePasswordInput)),

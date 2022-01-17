@@ -22,29 +22,30 @@ const type_graphql_1 = require("type-graphql");
 const hello_1 = require("./resolvers/hello");
 const post_1 = require("./resolvers/post");
 const user_1 = require("./resolvers/user");
-const redis_1 = __importDefault(require("redis"));
 const express_session_1 = __importDefault(require("express-session"));
+const connect_redis_1 = __importDefault(require("connect-redis"));
+const redis_1 = require("redis");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const orm = yield core_1.MikroORM.init(mikro_orm_config_1.default);
     yield orm.getMigrator().up();
     const app = (0, express_1.default)();
-    const RedisStore = require('connect-redis')(express_session_1.default);
-    const redisClient = redis_1.default.createClient();
+    const RedisStore = (0, connect_redis_1.default)(express_session_1.default);
+    const redisClient = (0, redis_1.createClient)();
     app.use((0, express_session_1.default)({
-        name: 'qid',
+        name: "qid",
         store: new RedisStore({
             client: redisClient,
-            disableTouch: true
+            disableTouch: true,
         }),
         cookie: {
-            sameSite: 'lax',
             maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
             httpOnly: true,
+            sameSite: "lax",
             secure: constants_1.__prod__,
         },
         saveUninitialized: false,
-        secret: 'dagwagewrq',
-        resave: false
+        secret: 'dwew',
+        resave: false,
     }));
     const apolloServer = new apollo_server_express_1.ApolloServer({
         schema: yield (0, type_graphql_1.buildSchema)({
