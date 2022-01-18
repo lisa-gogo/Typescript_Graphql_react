@@ -1,7 +1,7 @@
 export {};
 
 declare module 'express-session' {
-    interface SessionData {
+    interface  SessionData {
         userId: number
     }
 }

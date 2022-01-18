@@ -40,6 +40,7 @@ export class UserResolver {
         @Ctx(){ req, em}: MyContext
    ){ // you are not logged in
       if(!req.session.userId){
+          console.log(req.session)
           return null;
       }
       const user = await em.findOne(User, {id: req.session.userId})
@@ -111,13 +112,15 @@ export class UserResolver {
              return {
                 errors:[{
                     field:"password",
-                    message: "invalid password ",
+                     message: "invalid password ",
                 }]   
              }
          }    
         
         req.session.userId= user.id
-        console.log(req.session.userId)
+        // console.log('ok')
+        // console.log(typeof req.session.userId)
+        console.log(req.session)
        return{
            user 
        }
